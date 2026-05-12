@@ -1,5 +1,6 @@
-package com.jeywoods.reciperealm.ui.screens
+package com.jeywoods.reciperealm.ui.screens.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,24 +28,23 @@ fun SettingsScreen(
     onDarkModeToggle: (Boolean) -> Unit,
     onBack: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            AppTopBar(
-                title = "Настройки",
-                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
-                onNavigationClick = onBack
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        AppTopBar(
+            title = "Настройки",
+            navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+            onNavigationClick = onBack
+        )
+
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+                .fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Переключатель тёмной темы
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -83,10 +83,9 @@ fun SettingsScreen(
                 }
             }
 
-            // Разделитель
             item {
                 Text(
-                    text = "🎨 Цветовая схема",
+                    text = "Цветовая схема",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -94,7 +93,6 @@ fun SettingsScreen(
                 )
             }
 
-            // Список цветовых тем
             items(ColorTheme.values()) { theme ->
                 Card(
                     modifier = Modifier
@@ -135,7 +133,7 @@ fun SettingsScreen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "Recipe Realm v1.0",
+                    text = "Recipe Realm v1.1",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.fillMaxWidth()

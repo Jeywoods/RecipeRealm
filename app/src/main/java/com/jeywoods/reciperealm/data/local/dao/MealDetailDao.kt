@@ -12,4 +12,6 @@ interface MealDetailDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMealDetail(mealDetail: MealDetailEntity)
+    @Query("SELECT * FROM meal_detail ORDER BY RANDOM() LIMIT 1")
+    fun getAnyMealDetail(): Flow<MealDetailEntity?>
 }

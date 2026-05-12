@@ -13,10 +13,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.jeywoods.reciperealm.ui.components.BottomNavigationBar
-import com.jeywoods.reciperealm.ui.screens.*
 import com.jeywoods.reciperealm.ui.screens.favorites.FavoritesScreen
+import com.jeywoods.reciperealm.ui.screens.home.CategoryScreen
 import com.jeywoods.reciperealm.ui.screens.home.HomeScreen
+import com.jeywoods.reciperealm.ui.screens.home.MealDetailScreen
+import com.jeywoods.reciperealm.ui.screens.home.MealsScreen
 import com.jeywoods.reciperealm.ui.screens.profile.ProfileScreen
+import com.jeywoods.reciperealm.ui.screens.profile.SettingsScreen
 import com.jeywoods.reciperealm.ui.screens.search.SearchScreen
 import com.jeywoods.reciperealm.ui.theme.ColorTheme
 
@@ -99,6 +102,7 @@ fun NavGraph(
             }
 
             composable(route = Screens.Search.route) {
+                // Убрали создание viewModel здесь и не передаем параметр
                 SearchScreen(
                     onMealClick = { mealId ->
                         navController.navigate(Screens.MealDetail.passMealId(mealId))

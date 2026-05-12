@@ -1,4 +1,4 @@
-package com.jeywoods.reciperealm.ui.screens
+package com.jeywoods.reciperealm.ui.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

@@ -1,11 +1,13 @@
 package com.jeywoods.reciperealm.data.repository
 
+import android.util.Log
 import com.jeywoods.reciperealm.data.local.AppDatabase
 import com.jeywoods.reciperealm.data.local.entities.CategoryEntity
 import com.jeywoods.reciperealm.data.local.entities.MealDetailEntity
 import com.jeywoods.reciperealm.data.local.entities.MealEntity
 import com.jeywoods.reciperealm.data.remote.ApiService
 import com.jeywoods.reciperealm.data.remote.MealDetailDto
+import com.jeywoods.reciperealm.data.remote.MealDto
 import com.jeywoods.reciperealm.utils.NetworkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,17 +22,18 @@ class MealRepository(
     private val networkManager: NetworkManager,
     private val database: AppDatabase
 ) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun getCategories(): Flow<List<CategoryEntity>> {
-        scope.launch {
+        Log.d("Repository", "getCategories called")
+        repositoryScope.launch {
             refreshCategories()
         }
         return database.categoryDao().getAllCategories()
     }
 
     fun getMealsByCategory(categoryName: String): Flow<List<MealEntity>> {
-        scope.launch {
+        repositoryScope.launch {
             refreshMealsByCategory(categoryName)
         }
         return database.mealDao().getMealsByCategory(categoryName)
@@ -40,44 +43,39 @@ class MealRepository(
         val cachedDetail = withContext(Dispatchers.IO) {
             database.mealDetailDao().getMealDetail(mealId).firstOrNull()
         }
-
-        if (cachedDetail != null && !networkManager.isNetworkAvailable()) {
-            android.util.Log.d("GET", "Возвращаем из кэша: ${cachedDetail.idMeal}")
+        if (cachedDetail != null) {
+            if (networkManager.isNetworkAvailable()) {
+                repositoryScope.launch { fetchAndSaveMealDetail(mealId) }
+            }
             return cachedDetail.toDto()
         }
-
         return try {
-            android.util.Log.d("GET", "Загружаем из сети: $mealId")
-            val response = apiService.getMealDetails(mealId)
-            val detail = response.meals?.firstOrNull()
-            android.util.Log.d("GET", "Получен DTO: ${detail?.idMeal}")
-
-            detail?.let {
-                saveMealToDatabase(it)
-            }
-
-            detail
+            fetchAndSaveMealDetail(mealId)
         } catch (e: Exception) {
-            android.util.Log.e("GET", "Ошибка: ${e.message}")
-            cachedDetail?.toDto()
+            Log.e("MealRepository", "Ошибка загрузки категорий: ${e.message}", e)
+            null
         }
     }
 
+    private suspend fun fetchAndSaveMealDetail(mealId: String): MealDetailDto? {
+        val response = apiService.getMealDetails(mealId)
+        val detail = response.meals?.firstOrNull()
+        detail?.let { saveMealToDatabase(it) }
+        return detail
+    }
+
     suspend fun getRandomMeal(): MealDetailDto? {
+        if (!networkManager.isNetworkAvailable()) {
+            return database.mealDetailDao().getAnyMealDetail().firstOrNull()?.toDto()
+        }
         return try {
-            android.util.Log.d("RANDOM", "Загружаем случайный рецепт")
             val response = apiService.getRandomMeal()
             val meal = response.meals?.firstOrNull()
-
-            meal?.let {
-                saveMealToDatabase(it)
-                android.util.Log.d("RANDOM", "Случайный рецепт загружен: ${it.idMeal}")
-            }
-
+            meal?.let { saveMealToDatabase(it) }
             meal
         } catch (e: Exception) {
-            android.util.Log.e("RANDOM", "Ошибка: ${e.message}")
-            null
+            Log.e("MealRepository", "Ошибка загрузки категорий: ${e.message}", e)
+            database.mealDetailDao().getAnyMealDetail().firstOrNull()?.toDto()
         }
     }
 
@@ -106,14 +104,14 @@ class MealRepository(
 
     private suspend fun saveMealToDatabase(dto: MealDetailDto) {
         withContext(Dispatchers.IO) {
-            android.util.Log.d("SAVE", "Сохраняем блюдо: ${dto.idMeal}")
-            android.util.Log.d("SAVE", "strIngredient1 = ${dto.strIngredient1}")
-            android.util.Log.d("SAVE", "strMeasure1 = ${dto.strMeasure1}")
+            Log.d("SAVE", "Сохраняем блюдо: ${dto.idMeal}")
+            Log.d("SAVE", "strIngredient1 = ${dto.strIngredient1}")
+            Log.d("SAVE", "strMeasure1 = ${dto.strMeasure1}")
 
             val entity = dto.toEntity()
             database.mealDetailDao().insertMealDetail(entity)
 
-            android.util.Log.d("SAVE", "Блюдо сохранено в БД")
+            Log.d("SAVE", "Блюдо сохранено в БД")
         }
     }
 
@@ -139,6 +137,16 @@ class MealRepository(
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    suspend fun searchMeals(query: String): List<MealDto> {
+        return try {
+            val response = apiService.searchMeals(query)
+            response.meals ?: emptyList()
+        } catch (e: Exception) {
+            Log.e("MealRepository", "Ошибка поиска: ${e.message}", e)
+            emptyList()
         }
     }
 }
@@ -242,3 +250,4 @@ private fun MealDetailEntity.toDto() = MealDetailDto(
     strMeasure19 = strMeasure19,
     strMeasure20 = strMeasure20
 )
+

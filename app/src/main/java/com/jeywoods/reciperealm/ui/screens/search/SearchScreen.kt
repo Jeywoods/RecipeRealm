@@ -10,89 +10,93 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jeywoods.reciperealm.data.remote.MealDto
+import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.components.AppTopBar
 import com.jeywoods.reciperealm.ui.components.mealsScreen.MealCard
 import com.jeywoods.reciperealm.ui.components.mealsScreen.MealDtoDisplay
+import com.jeywoods.reciperealm.ui.viewModel.SearchViewModel
+import org.koin.compose.getKoin
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     onMealClick: (String) -> Unit
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-    var searchResults by remember { mutableStateOf<List<MealDto>>(emptyList()) }
-    var isSearching by remember { mutableStateOf(false) }
+    val repository = getKoin().get<MealRepository>()
+    val viewModel = remember { SearchViewModel(repository) }
 
-    Scaffold(
-        topBar = {
-            AppTopBar(title = "Поиск рецептов")
-        }
-    ) { paddingValues ->
-        Column(
+    val query by viewModel.query.collectAsState()
+    val results by viewModel.results.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        AppTopBar(title = "Поиск рецептов")
+
+        OutlinedTextField(
+            value = query,
+            onValueChange = viewModel::onQueryChange,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = { query ->
-                    searchQuery = query
-                    if (query.length >= 2) {
-                        // TODO: Реализовать поиск через API
-                        // searchMeals(query)
-                    } else if (query.isEmpty()) {
-                        searchResults = emptyList()
-                    }
-                },
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            placeholder = { Text("Введите название блюда...") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            singleLine = true,
+            shape = MaterialTheme.shapes.large
+        )
+
+        when {
+            isLoading -> Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                placeholder = { Text("Введите название блюда...") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                singleLine = true,
-                shape = MaterialTheme.shapes.large
-            )
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
 
-            if (isSearching) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else if (searchResults.isNotEmpty()) {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    items(searchResults) { meal ->
-                        // Преобразуем MealDto в MealDisplay
-                        val mealDisplay = MealDtoDisplay(
+            results.isNotEmpty() -> LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                items(results, key = { it.idMeal }) { meal ->
+                    MealCard(
+                        meal = MealDtoDisplay(
                             idMeal = meal.idMeal,
                             strMeal = meal.strMeal,
                             strMealThumb = meal.strMealThumb
-                        )
-                        MealCard(
-                            meal = mealDisplay,
-                            onClick = { onMealClick(meal.idMeal) }
-                        )
-                    }
+                        ),
+                        onClick = { onMealClick(meal.idMeal) }
+                    )
                 }
-            } else if (searchQuery.isNotEmpty() && searchResults.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Ничего не найдено", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            } else {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Введите название блюда для поиска", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
+            }
+
+            query.length >= 2 && !isLoading -> Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "Ничего не найдено",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            else -> Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "Введите название блюда для поиска",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

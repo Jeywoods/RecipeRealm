@@ -3,8 +3,7 @@ package com.jeywoods.reciperealm.ui.theme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-
-// ========== СВЕТЛАЯ ТЕМА ПО УМОЛЧАНИЮ ==========
+//светлая тема по умолчанию
 val LightColorSchemeDefault = lightColorScheme(
     primary = Color(0xFF000000),
     onPrimary = Color.White,
@@ -15,8 +14,7 @@ val LightColorSchemeDefault = lightColorScheme(
     error = Color(0xFFBA1A1A),
     onError = Color.White
 )
-
-// ========== ТЁМНАЯ ТЕМА ПО УМОЛЧАНИЮ ==========
+//темная тема по умолчанию
 val DarkColorSchemeDefault = darkColorScheme(
     primary = Color(0xFFFFFFFF),
     onPrimary = Color.Black,
@@ -28,7 +26,7 @@ val DarkColorSchemeDefault = darkColorScheme(
     onError = Color(0xFF601410)
 )
 
-// ========== СВЕТЛЫЕ ЦВЕТНЫЕ ТЕМЫ ==========
+//светлые темы
 val LightColorSchemeMint = lightColorScheme(
     primary = Color(0xFF14B8A6),
     onPrimary = Color.White,
@@ -84,7 +82,7 @@ val LightColorSchemeBerry = lightColorScheme(
     onError = Color.White
 )
 
-// ========== ТЁМНЫЕ ЦВЕТНЫЕ ТЕМЫ ==========
+//темные тема
 val DarkColorSchemeMint = darkColorScheme(
     primary = Color(0xFF2DD4BF),
     onPrimary = Color.Black,

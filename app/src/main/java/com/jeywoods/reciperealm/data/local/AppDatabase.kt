@@ -17,7 +17,7 @@ import com.jeywoods.reciperealm.data.local.entities.MealEntity
         MealEntity::class,
         MealDetailEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

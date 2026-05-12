@@ -1,4 +1,4 @@
-package com.jeywoods.reciperealm.ui.viewmodel
+package com.jeywoods.reciperealm.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,20 +27,24 @@ class CategoriesViewModel(
     val isNetworkAvailable: StateFlow<Boolean> = _isNetworkAvailable.asStateFlow()
 
     init {
+        android.util.Log.d("CategoriesVM", "init called")
         loadCategories()
     }
 
     fun loadCategories() {
+        android.util.Log.d("CategoriesVM", "loadCategories called")
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
 
             repository.getCategories()
                 .catch { e ->
+                    android.util.Log.e("CategoriesVM", "Error: ${e.message}")
                     _error.value = "Ошибка загрузки категорий: ${e.message}"
                     _isLoading.value = false
                 }
                 .collect { categoriesList ->
+                    android.util.Log.d("CategoriesVM", "Received ${categoriesList.size} categories")
                     _categories.value = categoriesList
                     _isLoading.value = false
                     _isNetworkAvailable.value = repository.isNetworkAvailable()
@@ -50,20 +54,13 @@ class CategoriesViewModel(
 
     fun loadRandomMeal(onSuccess: (String) -> Unit) {
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-
             try {
                 val randomMeal = repository.getRandomMeal()
-                if (randomMeal != null) {
-                    onSuccess(randomMeal.idMeal)
-                } else {
-                    _error.value = "Не удалось загрузить случайный рецепт"
+                randomMeal?.let {
+                    onSuccess(it.idMeal)
                 }
             } catch (e: Exception) {
                 _error.value = "Ошибка: ${e.message}"
-            } finally {
-                _isLoading.value = false
             }
         }
     }

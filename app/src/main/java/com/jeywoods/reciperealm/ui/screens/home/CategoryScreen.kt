@@ -1,4 +1,4 @@
-package com.jeywoods.reciperealm.ui.screens
+package com.jeywoods.reciperealm.ui.screens.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.components.categoryScreen.CategoryCard
-import com.jeywoods.reciperealm.ui.viewmodel.CategoriesViewModel
+import com.jeywoods.reciperealm.ui.viewModel.CategoriesViewModel
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)

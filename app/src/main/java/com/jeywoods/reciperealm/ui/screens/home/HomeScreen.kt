@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.components.AppTopBar
 import com.jeywoods.reciperealm.ui.components.categoryScreen.CategoryCard
-import com.jeywoods.reciperealm.ui.viewmodel.CategoriesViewModel
+import com.jeywoods.reciperealm.ui.viewModel.CategoriesViewModel
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +32,9 @@ fun HomeScreen(
 
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-
+    LaunchedEffect(Unit) {
+        viewModel.loadCategories()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
