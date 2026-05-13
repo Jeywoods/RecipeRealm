@@ -23,7 +23,6 @@ import com.jeywoods.reciperealm.ui.screens.profile.SettingsScreen
 import com.jeywoods.reciperealm.ui.screens.search.SearchScreen
 import com.jeywoods.reciperealm.ui.theme.ColorTheme
 
-// Порядок вкладок слева направо
 private val bottomNavRoutes = listOf(
     Screens.Home.route,
     Screens.Search.route,
@@ -59,15 +58,14 @@ fun NavGraph(
         }
     }
 
-    // Направление: 1 = вправо (вход справа), -1 = влево (вход слева)
     val slideDirection by remember(currentRoute) {
         derivedStateOf {
             val from = getTabIndex(previousRoute)
             val to = getTabIndex(currentRoute)
             when {
-                from == -1 || to == -1 -> 1  // не bottom-tab экран — стандартный вход справа
-                to > from -> 1               // идём правее
-                else -> -1                   // идём левее
+                from == -1 || to == -1 -> 1
+                to > from -> 1
+                else -> -1
             }
         }
     }
