@@ -2,8 +2,10 @@ package com.jeywoods.reciperealm.di
 
 import com.jeywoods.reciperealm.data.local.AppDatabase
 import com.jeywoods.reciperealm.data.remote.ApiService
+import com.jeywoods.reciperealm.data.repository.FavoritesRepository
 import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.viewModel.CategoriesViewModel
+import com.jeywoods.reciperealm.ui.viewModel.FavoritesViewModel
 import com.jeywoods.reciperealm.ui.viewModel.MealDetailViewModel
 import com.jeywoods.reciperealm.ui.viewModel.MealsViewModel
 import com.jeywoods.reciperealm.ui.viewModel.SearchViewModel
@@ -37,6 +39,11 @@ val appModule = module {
             database = get()
         )
     }
+    single { get<AppDatabase>().favoriteMealDao() }
+
+    single { FavoritesRepository(get()) }
+
+    viewModel { FavoritesViewModel(get()) }
 
     viewModel { CategoriesViewModel(get()) }
     viewModel { SearchViewModel(get()) }

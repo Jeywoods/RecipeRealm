@@ -1,42 +1,105 @@
 package com.jeywoods.reciperealm.ui.screens.favorites
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.jeywoods.reciperealm.data.local.entities.FavoriteMealEntity
 import com.jeywoods.reciperealm.ui.components.AppTopBar
+import com.jeywoods.reciperealm.ui.viewModel.FavoritesViewModel
+import org.koin.compose.getKoin
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesScreen() {
-    Scaffold(
-        topBar = {
-            AppTopBar(title = "Мои блюда")
+fun FavoritesScreen(onMealClick: (String) -> Unit) {
+    val viewModel = getKoin().get<FavoritesViewModel>()
+    val favorites by viewModel.favorites.collectAsState()
+
+    Scaffold(topBar = { AppTopBar(title = "Мои блюда") }) { padding ->
+        if (favorites.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("📚", fontSize = 48.sp)
+                    Spacer(Modifier.height(16.dp))
+                    Text("Здесь появятся ваши сохранённые рецепты",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(8.dp))
+                    Text("Нажмите ❤️ на любом рецепте",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+                }
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(favorites, key = { it.mealId }) { meal ->
+                    FavoriteCard(
+                        meal = meal,
+                        onClick = { onMealClick(meal.mealId) },
+                        onRemove = { viewModel.toggleFavorite(meal) }
+                    )
+                }
+            }
         }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
+    }
+}
+
+@Composable
+private fun FavoriteCard(
+    meal: FavoriteMealEntity,
+    onClick: () -> Unit,
+    onRemove: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(2.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().height(100.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("📚", fontSize = 48.sp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    "Скоро здесь появятся ваши сохраненные рецепты",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    "Эта функция будет доступна в следующем обновлении",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                )
+            AsyncImage(
+                model = meal.strMealThumb,
+                contentDescription = meal.strMeal,
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Column(
+                modifier = Modifier.weight(1f).padding(horizontal = 16.dp)
+            ) {
+                Text(meal.strMeal, fontWeight = FontWeight.SemiBold, maxLines = 2)
+                if (!meal.strCategory.isNullOrBlank()) {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "${meal.strCategory} • ${meal.strArea ?: ""}",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            IconButton(onClick = onRemove) {
+                Icon(Icons.Default.Favorite, "Удалить", tint = MaterialTheme.colorScheme.error)
             }
         }
     }

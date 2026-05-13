@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.jeywoods.reciperealm.data.local.entities.FavoriteMealEntity
 import com.jeywoods.reciperealm.data.remote.MealDetailDto
 import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.components.AppTopBar
@@ -24,29 +27,50 @@ import com.jeywoods.reciperealm.ui.components.mealsDetailScreen.MealLabel
 import com.jeywoods.reciperealm.ui.components.mealsDetailScreen.IngredientsSection
 import com.jeywoods.reciperealm.ui.components.mealsDetailScreen.InstructionsSection
 import com.jeywoods.reciperealm.ui.components.mealsDetailScreen.YouTubeSection
+import com.jeywoods.reciperealm.ui.viewModel.FavoritesViewModel
 import com.jeywoods.reciperealm.ui.viewModel.MealDetailViewModel
 import org.koin.compose.getKoin
 
 @Composable
-fun MealDetailScreen(
-    mealId: String,
-    onBack: () -> Unit
-) {
+fun MealDetailScreen(mealId: String, onBack: () -> Unit) {
     val repository = getKoin().get<MealRepository>()
+    val favViewModel = getKoin().get<FavoritesViewModel>()
     val viewModel = remember(mealId) { MealDetailViewModel(repository, mealId) }
 
     val mealDetail by viewModel.mealDetail.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isFavorite by favViewModel.isFavorite(mealId).collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
+    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         AppTopBar(
             title = mealDetail?.strMeal?.take(30) ?: "Детали рецепта",
             navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
-            onNavigationClick = onBack
+            onNavigationClick = onBack,
+            actions = {
+                IconButton(
+                    onClick = {
+                        mealDetail?.let { meal ->
+                            favViewModel.toggleFavorite(
+                                FavoriteMealEntity(
+                                    mealId = meal.idMeal,
+                                    strMeal = meal.strMeal,
+                                    strMealThumb = meal.strMealThumb,
+                                    strCategory = meal.strCategory,
+                                    strArea = meal.strArea
+                                )
+                            )
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite
+                        else Icons.Default.FavoriteBorder,
+                        contentDescription = "Избранное",
+                        tint = if (isFavorite) Color.Red
+                        else MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
         )
 
         when {

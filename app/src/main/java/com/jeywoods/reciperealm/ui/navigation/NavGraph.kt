@@ -135,7 +135,11 @@ fun NavGraph(
             }
 
             composable(route = Screens.Favorites.route) {
-                FavoritesScreen()
+                FavoritesScreen(
+                    onMealClick = { mealId ->
+                        navController.navigate(Screens.MealDetail.passMealId(mealId))
+                    }
+                )
             }
 
             composable(route = Screens.Profile.route) {
