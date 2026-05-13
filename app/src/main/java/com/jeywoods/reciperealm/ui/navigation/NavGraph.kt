@@ -23,6 +23,17 @@ import com.jeywoods.reciperealm.ui.screens.profile.SettingsScreen
 import com.jeywoods.reciperealm.ui.screens.search.SearchScreen
 import com.jeywoods.reciperealm.ui.theme.ColorTheme
 
+// Порядок вкладок слева направо
+private val bottomNavRoutes = listOf(
+    Screens.Home.route,
+    Screens.Search.route,
+    Screens.Favorites.route,
+    Screens.Profile.route
+)
+
+private fun getTabIndex(route: String?) =
+    bottomNavRoutes.indexOf(route)
+
 @Composable
 fun NavGraph(
     selectedColorTheme: ColorTheme,
@@ -34,14 +45,30 @@ fun NavGraph(
     val navController = rememberNavController()
 
     var currentRoute by remember { mutableStateOf(startDestination) }
+    var previousRoute by remember { mutableStateOf(startDestination) }
 
     DisposableEffect(navController) {
         val listener = androidx.navigation.NavController.OnDestinationChangedListener { _, destination, _ ->
-            currentRoute = destination.route ?: Screens.Home.route
+            val newRoute = destination.route ?: Screens.Home.route
+            previousRoute = currentRoute
+            currentRoute = newRoute
         }
         navController.addOnDestinationChangedListener(listener)
         onDispose {
             navController.removeOnDestinationChangedListener(listener)
+        }
+    }
+
+    // Направление: 1 = вправо (вход справа), -1 = влево (вход слева)
+    val slideDirection by remember(currentRoute) {
+        derivedStateOf {
+            val from = getTabIndex(previousRoute)
+            val to = getTabIndex(currentRoute)
+            when {
+                from == -1 || to == -1 -> 1  // не bottom-tab экран — стандартный вход справа
+                to > from -> 1               // идём правее
+                else -> -1                   // идём левее
+            }
         }
     }
 
@@ -67,13 +94,13 @@ fun NavGraph(
                 .padding(innerPadding),
             enterTransition = {
                 slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
+                    initialOffsetX = { fullWidth -> fullWidth * slideDirection },
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
+                    targetOffsetX = { fullWidth -> -fullWidth * slideDirection },
                     animationSpec = tween(300)
                 )
             },
@@ -102,7 +129,6 @@ fun NavGraph(
             }
 
             composable(route = Screens.Search.route) {
-                // Убрали создание viewModel здесь и не передаем параметр
                 SearchScreen(
                     onMealClick = { mealId ->
                         navController.navigate(Screens.MealDetail.passMealId(mealId))
