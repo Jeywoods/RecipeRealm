@@ -1,11 +1,14 @@
 package com.jeywoods.reciperealm.data.local.entities
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorite_meals")
+@Entity(
+    tableName = "favorite_meals",
+    primaryKeys = ["mealId", "userId"]
+)
 data class FavoriteMealEntity(
-    @PrimaryKey val mealId: String,
+    val mealId: String,
+    val userId: String,
     val strMeal: String,
     val strMealThumb: String,
     val strCategory: String?,

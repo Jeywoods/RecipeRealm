@@ -1,5 +1,7 @@
 package com.jeywoods.reciperealm.data.remote
 
+import com.jeywoods.reciperealm.ui.components.mealsScreen.MealItem
+
 data class CategoryResponse(
     val categories: List<CategoryDto>
 )
@@ -20,3 +22,10 @@ data class MealDto(
     val strMeal: String,
     val strMealThumb: String
 )
+
+
+data class MealItemDto(
+    override val idMeal: String,
+    override val strMeal: String,
+    override val strMealThumb: String
+) : MealItem

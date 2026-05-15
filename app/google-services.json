@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "160823254698",
+    "project_id": "reciperealm-895ad",
+    "storage_bucket": "reciperealm-895ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160823254698:android:2bf73d9b9e23e20c2f7ad3",
+        "android_client_info": {
+          "package_name": "com.jeywoods.reciperealm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160823254698-gk42ea57gmn0q7376neupk5ailo620t1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jeywoods.reciperealm",
+            "certificate_hash": "803eaef0f0081935387adf5cb93aba379d253275"
+          }
+        },
+        {
+          "client_id": "160823254698-gfml97obd995h9o4qttt8h4ujpbrkrc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD77aP9q7ytfCXUk7wD4zPgKw2HQQ2irZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160823254698-gfml97obd995h9o4qttt8h4ujpbrkrc4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

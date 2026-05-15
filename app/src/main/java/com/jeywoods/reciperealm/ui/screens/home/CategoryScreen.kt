@@ -41,18 +41,18 @@ fun CategoryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Кулинарные категории") },
+                title = { Text("Culinary categories") },
                 actions = {
                     IconButton(onClick = { openRandomMeal() }) {
                         Icon(
                             Icons.Default.Shuffle,
-                            contentDescription = "Случайный рецепт"
+                            contentDescription = "Random recipe"
                         )
                     }
                     IconButton(onClick = onSettingsClick) {
                         Icon(
                             Icons.Default.Settings,
-                            contentDescription = "Настройки"
+                            contentDescription = "Settings"
                         )
                     }
                 },
@@ -74,17 +74,17 @@ fun CategoryScreen(
             error != null -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Ошибка: $error", color = MaterialTheme.colorScheme.error)
+                        Text("Error: $error", color = MaterialTheme.colorScheme.error)
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { viewModel.refresh() }) {
-                            Text("Повторить")
+                            Text("Repeat")
                         }
                     }
                 }
             }
             categories.isEmpty() -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Нет категорий", color = MaterialTheme.colorScheme.onBackground)
+                    Text("Categories empty", color = MaterialTheme.colorScheme.onBackground)
                 }
             }
             else -> {

@@ -19,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.jeywoods.reciperealm.data.local.entities.FavoriteMealEntity
 import com.jeywoods.reciperealm.data.remote.MealDetailDto
 import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.components.AppTopBar
@@ -51,13 +50,11 @@ fun MealDetailScreen(mealId: String, onBack: () -> Unit) {
                     onClick = {
                         mealDetail?.let { meal ->
                             favViewModel.toggleFavorite(
-                                FavoriteMealEntity(
-                                    mealId = meal.idMeal,
-                                    strMeal = meal.strMeal,
-                                    strMealThumb = meal.strMealThumb,
-                                    strCategory = meal.strCategory,
-                                    strArea = meal.strArea
-                                )
+                                mealId = meal.idMeal,
+                                strMeal = meal.strMeal,
+                                strMealThumb = meal.strMealThumb,
+                                strCategory = meal.strCategory,
+                                strArea = meal.strArea
                             )
                         }
                     }
@@ -65,7 +62,7 @@ fun MealDetailScreen(mealId: String, onBack: () -> Unit) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite
                         else Icons.Default.FavoriteBorder,
-                        contentDescription = "Избранное",
+                        contentDescription = "Favourites",
                         tint = if (isFavorite) Color.Red
                         else MaterialTheme.colorScheme.onPrimary
                     )
@@ -90,7 +87,7 @@ private fun LoadingState() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Загрузка рецепта...", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("Uploading recipe...", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

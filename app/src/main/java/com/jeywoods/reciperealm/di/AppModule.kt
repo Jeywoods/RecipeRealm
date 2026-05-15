@@ -1,14 +1,12 @@
 package com.jeywoods.reciperealm.di
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jeywoods.reciperealm.data.local.AppDatabase
 import com.jeywoods.reciperealm.data.remote.ApiService
 import com.jeywoods.reciperealm.data.repository.FavoritesRepository
 import com.jeywoods.reciperealm.data.repository.MealRepository
-import com.jeywoods.reciperealm.ui.viewModel.CategoriesViewModel
-import com.jeywoods.reciperealm.ui.viewModel.FavoritesViewModel
-import com.jeywoods.reciperealm.ui.viewModel.MealDetailViewModel
-import com.jeywoods.reciperealm.ui.viewModel.MealsViewModel
-import com.jeywoods.reciperealm.ui.viewModel.SearchViewModel
+import com.jeywoods.reciperealm.ui.viewModel.*
 import com.jeywoods.reciperealm.utils.AppSettingsManager
 import com.jeywoods.reciperealm.utils.NetworkManager
 import org.koin.android.ext.koin.androidContext
@@ -39,26 +37,29 @@ val appModule = module {
             database = get()
         )
     }
+
     single { get<AppDatabase>().favoriteMealDao() }
 
-    single { FavoritesRepository(get()) }
+    single {
+        FavoritesRepository(
+            dao = get(),
+            auth = FirebaseAuth.getInstance(),
+            firestore = FirebaseFirestore.getInstance()
+        )
+    }
 
     viewModel { FavoritesViewModel(get()) }
-
     viewModel { CategoriesViewModel(get()) }
     viewModel { SearchViewModel(get()) }
 
     viewModel { params ->
-        MealsViewModel(
-            repository = get(),
-            categoryName = params.get()
-        )
+        MealsViewModel(repository = get(), categoryName = params.get())
+    }
+    viewModel { params ->
+        MealDetailViewModel(repository = get(), mealId = params.get())
     }
 
-    viewModel { params ->
-        MealDetailViewModel(
-            repository = get(),
-            mealId = params.get()
-        )
-    }
+    viewModel { ProfileViewModel() }
+
+    viewModel { AuthViewModel() }
 }

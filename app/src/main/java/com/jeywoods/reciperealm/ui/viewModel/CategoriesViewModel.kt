@@ -40,7 +40,7 @@ class CategoriesViewModel(
             repository.getCategories()
                 .catch { e ->
                     android.util.Log.e("CategoriesVM", "Error: ${e.message}")
-                    _error.value = "Ошибка загрузки категорий: ${e.message}"
+                    _error.value = "Category loading error: ${e.message}"
                     _isLoading.value = false
                 }
                 .collect { categoriesList ->
@@ -60,7 +60,7 @@ class CategoriesViewModel(
                     onSuccess(it.idMeal)
                 }
             } catch (e: Exception) {
-                _error.value = "Ошибка: ${e.message}"
+                _error.value = "Error: ${e.message}"
             }
         }
     }

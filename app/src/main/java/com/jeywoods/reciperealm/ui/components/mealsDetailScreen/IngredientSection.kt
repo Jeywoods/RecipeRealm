@@ -17,7 +17,7 @@ fun IngredientsSection(ingredients: List<Pair<String, String>>) {
             .padding(horizontal = 20.dp, vertical = 8.dp)
     ) {
         Text(
-            text = "Ингредиенты",
+            text = "Ingredients",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,

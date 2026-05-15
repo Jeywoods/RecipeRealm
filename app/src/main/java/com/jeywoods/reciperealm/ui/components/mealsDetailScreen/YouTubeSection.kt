@@ -50,7 +50,7 @@ fun YouTubeSection(youtubeUrl: String) {
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Смотреть видео рецепт на YouTube",
+                text = "Watch the recipe video on YouTube",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.primary

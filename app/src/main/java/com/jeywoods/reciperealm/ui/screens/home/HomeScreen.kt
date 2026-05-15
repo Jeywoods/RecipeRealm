@@ -52,7 +52,7 @@ fun HomeScreen(
 
             item {
                 Text(
-                    text = "Категории",
+                    text = "Category",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -122,7 +122,6 @@ fun RandomMealCard(onRandomMealClick: (String) -> Unit) {
                     .padding(horizontal = 24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Кубик
                 Text(
                     text = "🎲",
                     fontSize = 48.sp
@@ -132,14 +131,14 @@ fun RandomMealCard(onRandomMealClick: (String) -> Unit) {
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Случайный рецепт",
+                        text = "Random recipe",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Нажмите для вдохновения",
+                        text = "Click for inspiration",
                         fontSize = 13.sp,
                         color = Color.White.copy(alpha = 0.8f)
                     )

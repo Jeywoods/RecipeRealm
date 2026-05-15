@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+google-service.json
+hs_err_pid15468.log
+replay_pid15468.log

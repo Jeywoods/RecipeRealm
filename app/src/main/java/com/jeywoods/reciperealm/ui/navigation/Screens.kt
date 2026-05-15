@@ -13,5 +13,6 @@ sealed class Screens(val route: String) {
     object MealDetail : Screens("meal/{mealId}") {
         fun passMealId(mealId: String) = "meal/$mealId"
     }
+    object Auth : Screens("auth")
     object Settings : Screens("settings")
 }

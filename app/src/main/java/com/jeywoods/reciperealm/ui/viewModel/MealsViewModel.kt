@@ -40,8 +40,9 @@ class MealsViewModel(
 
             repository.getMealsByCategory(categoryName)
                 .catch { e ->
-                    _error.value = "Ошибка загрузки блюд: ${e.message}"
+                    _error.value = "Error loading dishes: ${e.message}"
                     _isLoading.value = false
+                    _isNetworkAvailable.value = repository.isNetworkAvailable()
                 }
                 .collect { mealsList ->
                     _meals.value = mealsList

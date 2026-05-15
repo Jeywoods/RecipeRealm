@@ -12,7 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.firebase.auth.FirebaseAuth
 import com.jeywoods.reciperealm.ui.components.BottomNavigationBar
+import com.jeywoods.reciperealm.ui.screens.auth.AuthScreen
 import com.jeywoods.reciperealm.ui.screens.favorites.FavoritesScreen
 import com.jeywoods.reciperealm.ui.screens.home.CategoryScreen
 import com.jeywoods.reciperealm.ui.screens.home.HomeScreen
@@ -42,7 +44,12 @@ fun NavGraph(
     startDestination: String = Screens.Home.route
 ) {
     val navController = rememberNavController()
-
+    val startDestination = remember {
+        if (FirebaseAuth.getInstance().currentUser != null)
+            Screens.Home.route
+        else
+            Screens.Auth.route
+    }
     var currentRoute by remember { mutableStateOf(startDestination) }
     var previousRoute by remember { mutableStateOf(startDestination) }
 
@@ -144,8 +151,11 @@ fun NavGraph(
 
             composable(route = Screens.Profile.route) {
                 ProfileScreen(
-                    onSettingsClick = {
-                        navController.navigate(Screens.Settings.route)
+                    onSettingsClick = { navController.navigate(Screens.Settings.route) },
+                    onLogoutClick = {
+                        navController.navigate(Screens.Auth.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 )
             }
@@ -188,7 +198,15 @@ fun NavGraph(
                     onBack = { navController.popBackStack() }
                 )
             }
-
+            composable(route = Screens.Auth.route) {
+                AuthScreen(
+                    onAuthSuccess = {
+                        navController.navigate(Screens.Home.route) {
+                            popUpTo(Screens.Auth.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(route = Screens.Settings.route) {
                 SettingsScreen(
                     selectedColorTheme = selectedColorTheme,

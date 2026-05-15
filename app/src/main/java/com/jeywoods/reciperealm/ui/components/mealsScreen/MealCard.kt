@@ -14,27 +14,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 
-interface MealDisplay {
+interface MealItem {
     val idMeal: String
     val strMeal: String
     val strMealThumb: String
 }
 
-data class MealEntityDisplay(
-    override val idMeal: String,
-    override val strMeal: String,
-    override val strMealThumb: String
-) : MealDisplay
-
-data class MealDtoDisplay(
-    override val idMeal: String,
-    override val strMeal: String,
-    override val strMealThumb: String
-) : MealDisplay
-
 @Composable
 fun MealCard(
-    meal: MealDisplay,
+    meal: MealItem,
     onClick: () -> Unit
 ) {
     Card(

@@ -15,10 +15,10 @@ data class NavItem(
 )
 
 val navItems = listOf(
-    NavItem("Главная", Icons.Default.Home, Icons.Filled.Home, Screens.Home.route),
-    NavItem("Поиск", Icons.Default.Search, Icons.Filled.Search, Screens.Search.route),
-    NavItem("Мои блюда", Icons.Default.FavoriteBorder, Icons.Filled.Favorite, Screens.Favorites.route),
-    NavItem("Профиль", Icons.Default.Person, Icons.Filled.Person, Screens.Profile.route)
+    NavItem("Home", Icons.Default.Home, Icons.Filled.Home, Screens.Home.route),
+    NavItem("Search", Icons.Default.Search, Icons.Filled.Search, Screens.Search.route),
+    NavItem("My dishes", Icons.Default.FavoriteBorder, Icons.Filled.Favorite, Screens.Favorites.route),
+    NavItem("Profile", Icons.Default.Person, Icons.Filled.Person, Screens.Profile.route)
 )
 
 @Composable

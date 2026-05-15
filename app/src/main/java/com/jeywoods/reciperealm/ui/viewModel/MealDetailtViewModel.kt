@@ -29,12 +29,11 @@ class MealDetailViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-
             try {
                 val meal = repository.getMealDetails(mealId)
                 _mealDetail.value = meal
             } catch (e: Exception) {
-                _error.value = "Ошибка загрузки: ${e.message}"
+                _error.value = "Load error: ${e.message}"
             } finally {
                 _isLoading.value = false
             }

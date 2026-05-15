@@ -34,7 +34,7 @@ fun SettingsScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         AppTopBar(
-            title = "Настройки",
+            title = "Settings",
             navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
             onNavigationClick = onBack
         )
@@ -55,7 +55,7 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = "Выберете тему",
+                            text = "Choose theme",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
@@ -69,13 +69,13 @@ fun SettingsScreen(
                             FilterChip(
                                 selected = !isDarkMode,
                                 onClick = { onDarkModeToggle(false) },
-                                label = { Text("Светлая") },
+                                label = { Text("Light") },
                                 modifier = Modifier.weight(1f)
                             )
                             FilterChip(
                                 selected = isDarkMode,
                                 onClick = { onDarkModeToggle(true) },
-                                label = { Text("Темная") },
+                                label = { Text("Dark") },
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -85,7 +85,7 @@ fun SettingsScreen(
 
             item {
                 Text(
-                    text = "Цветовая схема",
+                    text = "Color scheme",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -123,7 +123,7 @@ fun SettingsScreen(
                         if (selectedColorTheme == theme) {
                             Icon(
                                 imageVector = Icons.Default.Check,
-                                contentDescription = "Выбрано",
+                                contentDescription = "Selected",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -133,7 +133,7 @@ fun SettingsScreen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "Recipe Realm v1.1",
+                    text = "Recipe Realm v2.0",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.fillMaxWidth()

@@ -20,14 +20,13 @@ import com.jeywoods.reciperealm.data.local.entities.MealEntity
         MealDetailEntity::class,
         FavoriteMealEntity::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun mealDao(): MealDao
     abstract fun mealDetailDao(): MealDetailDao
-
     abstract fun favoriteMealDao(): FavoriteMealDao
 
     companion object {

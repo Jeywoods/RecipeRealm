@@ -27,19 +27,18 @@ fun FavoritesScreen(onMealClick: (String) -> Unit) {
     val viewModel = getKoin().get<FavoritesViewModel>()
     val favorites by viewModel.favorites.collectAsState()
 
-    Scaffold(topBar = { AppTopBar(title = "Мои блюда") }) { padding ->
+    Scaffold(topBar = { AppTopBar(title = "My dishes") })
+    { padding ->
         if (favorites.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(padding),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("📚", fontSize = 48.sp)
-                    Spacer(Modifier.height(16.dp))
-                    Text("Здесь появятся ваши сохранённые рецепты",
+                    Text("Your saved recipes will appear here.",
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(8.dp))
-                    Text("Нажмите ❤️ на любом рецепте",
+                    Text("Click ❤️ on any recipe",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
                 }
@@ -54,7 +53,15 @@ fun FavoritesScreen(onMealClick: (String) -> Unit) {
                     FavoriteCard(
                         meal = meal,
                         onClick = { onMealClick(meal.mealId) },
-                        onRemove = { viewModel.toggleFavorite(meal) }
+                        onRemove = {
+                            viewModel.toggleFavorite(
+                                mealId = meal.mealId,
+                                strMeal = meal.strMeal,
+                                strMealThumb = meal.strMealThumb,
+                                strCategory = meal.strCategory,
+                                strArea = meal.strArea
+                            )
+                        }
                     )
                 }
             }
@@ -99,7 +106,7 @@ private fun FavoriteCard(
                 }
             }
             IconButton(onClick = onRemove) {
-                Icon(Icons.Default.Favorite, "Удалить", tint = MaterialTheme.colorScheme.error)
+                Icon(Icons.Default.Favorite, "Delete", tint = MaterialTheme.colorScheme.error)
             }
         }
     }

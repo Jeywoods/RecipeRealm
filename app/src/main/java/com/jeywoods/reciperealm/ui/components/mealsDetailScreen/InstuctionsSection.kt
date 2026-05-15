@@ -17,7 +17,7 @@ fun InstructionsSection(instructions: String) {
             .padding(horizontal = 20.dp, vertical = 8.dp)
     ) {
         Text(
-            text = "Приготовление",
+            text = "Recipe",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,

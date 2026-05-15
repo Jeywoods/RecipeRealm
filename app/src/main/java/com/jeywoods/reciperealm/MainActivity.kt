@@ -51,15 +51,11 @@ class MainActivity : ComponentActivity() {
                         isDarkMode = isDarkMode!!,
                         onColorThemeChanged = { theme ->
                             selectedColorTheme = theme
-                            lifecycleScope.launch {
-                                appSettingsManager.saveColorTheme(theme)
-                            }
+                            lifecycleScope.launch { appSettingsManager.saveColorTheme(theme) }
                         },
                         onDarkModeChanged = { darkMode ->
                             isDarkMode = darkMode
-                            lifecycleScope.launch {
-                                appSettingsManager.saveDarkMode(darkMode)
-                            }
+                            lifecycleScope.launch { appSettingsManager.saveDarkMode(darkMode) }
                         }
                     )
                 }
