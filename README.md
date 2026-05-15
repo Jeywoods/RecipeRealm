@@ -1,7 +1,4 @@
 <div align="center">
-
-<img src="screenshots/HomeScreen.jpg" width="100px" height="100px" style="border-radius: 24px;" alt="RecipeRealm Logo"/>
-
 # 🍽️ RecipeRealm
 
 **Откройте мир вкусов — ищите, сохраняйте, готовьте.**
