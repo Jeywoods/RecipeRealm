@@ -1,5 +1,5 @@
 <div align="center">
-# 🍽️ RecipeRealm
+🍽️ RecipeRealm
 
 **Откройте мир вкусов — ищите, сохраняйте, готовьте.**
 
