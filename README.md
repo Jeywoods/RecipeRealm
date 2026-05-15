@@ -8,9 +8,15 @@
 **RecipeRealm** — это Android-приложение для поиска, просмотра и сохранения рецептов. Приложение позволяет пользователям искать блюда по категориям и управлять персональным профилем с авторизацией через Google.
 
 <p align="center">
-  <img src="screenshots/home_screen.png" width="30%" alt="Главный экран"/>
-  <img src="screenshots/recipe_detail.png" width="30%" alt="Детали рецепта"/>
-  <img src="screenshots/search_screen.png" width="30%" alt="Поиск рецептов"/>
+  <img src="screenshots/HomeScreen.jpg" width="30%" alt="Home Screen"/>
+  <img src="screenshots/MealsScreen.jpg" width="30%" alt="Meals Screen"/>
+  <img src="screenshots/ScreenMealDetails.jpg" width="30%" alt="Screen Meal Details"/>
+  <img src="screenshots/ScreenMealDetailsWithYouTubeSection.jpg" width="30%" alt="Screen Meal Details With YouTubeSection"/>
+  <img src="screenshots/SearchRecipe.jpg" width="30%" alt="Search Screen"/>
+  <img src="screenshots/MyDishesScreen.jpg" width="30%" alt="My Dishes Screen"/>
+  <img src="screenshots/ProfileScreen.jpg" width="30%" alt="Profile Screen"/>
+  <img src="screenshots/SettingsScreen.jpg" width="30%" alt="Settings Screen"/>
+  
 </p>
 
 ---
