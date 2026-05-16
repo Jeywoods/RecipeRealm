@@ -1,62 +1,136 @@
-# 🍽️ RecipeRealm
+<div align="center">
+🍽️ RecipeRealm
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
-[![Compose](https://img.shields.io/badge/Jetpack%20Compose-2024.12.00-green.svg?style=flat)](https://developer.android.com/jetpack/compose)
-[![Material 3](https://img.shields.io/badge/Material%203-1.3.0-purple.svg?style=flat)](https://m3.material.io/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+**Откройте мир вкусов — ищите, сохраняйте, готовьте.**
 
-**RecipeRealm** — это Android-приложение для поиска, просмотра и сохранения рецептов. Приложение позволяет пользователям искать блюда по категориям и управлять персональным профилем с авторизацией через Google.
+[![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Compose](https://img.shields.io/badge/Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Material 3](https://img.shields.io/badge/Material_3-757575?style=for-the-badge&logo=material-design&logoColor=white)](https://m3.material.io/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 
-<p align="center">
-  <img src="screenshots/home_screen.png" width="30%" alt="Главный экран"/>
-  <img src="screenshots/recipe_detail.png" width="30%" alt="Детали рецепта"/>
-  <img src="screenshots/search_screen.png" width="30%" alt="Поиск рецептов"/>
-</p>
+<br/>
+
+<img src="screenshots/HomeScreen.jpg" width="19%" alt="Home"/>
+<img src="screenshots/MealsScreen.jpg" width="19%" alt="Meals"/>
+<img src="screenshots/ScreenMealDetails.jpg" width="19%" alt="Details"/>
+<img src="screenshots/SearchRecipe.jpg" width="19%" alt="Search"/>
+<img src="screenshots/ProfileScreen.jpg" width="19%" alt="Profile"/>
+
+</div>
 
 ---
 
-## ✨ Возможности
+## ✨ О приложении
 
-- 🔐 **Аутентификация** — вход и регистрация через Google и Firebase Auth
-- 📚 **Категории рецептов** — удобная навигация по типам блюд
-- 🔍 **Поиск рецептов** — быстрый поиск по названию и ингредиентам
-- 👤 **Личные рецепты** — каждый пользователь видит только свои добавленные рецепты
-- 🎨 **Темы оформления** — поддержка светлой и тёмной темы
-- 📱 **Material 3 Design** — современный интерфейс на Jetpack Compose
+**RecipeRealm** — это современное Android-приложение для поиска, просмотра и хранения любимых рецептов. Вдохновляйтесь тысячами блюд со всего мира, сохраняйте свои находки и управляйте персональной кулинарной коллекцией — всё в одном красивом приложении.
+
+---
+
+## 🚀 Возможности
+
+| Функция | Описание |
+|---|---|
+| 🔐 **Авторизация** | Быстрый вход через Google и Firebase Auth |
+| 📚 **Категории** | Удобная навигация по типам блюд |
+| 🔍 **Умный поиск** | Поиск по названию и ингредиентам |
+| 👤 **Мои рецепты** | Личная коллекция только ваших рецептов |
+| 🎨 **Темы** | Светлая и тёмная тема на ваш выбор |
+| 📺 **YouTube** | Встроенный просмотр видеорецептов |
+| 📱 **Material 3** | Современный интерфейс на Jetpack Compose |
+
+---
+
+## 📸 Скриншоты
+
+<div align="center">
+
+| Главная | Блюда | Детали | YouTube |
+|:---:|:---:|:---:|:---:|
+| <img src="screenshots/HomeScreen.jpg" width="180"/> | <img src="screenshots/MealsScreen.jpg" width="180"/> | <img src="screenshots/ScreenMealDetails.jpg" width="180"/> | <img src="screenshots/ScreenMealDetailsWithYouTubeSection.jpg" width="180"/> |
+
+| Поиск | Мои блюда | Профиль | Настройки |
+|:---:|:---:|:---:|:---:|
+| <img src="screenshots/SearchRecipe.jpg" width="180"/> | <img src="screenshots/MyDishesScreen.jpg" width="180"/> | <img src="screenshots/ProfileScreen.jpg" width="180"/> | <img src="screenshots/SettingsScreen.jpg" width="180"/> |
+
+</div>
 
 ---
 
 ## 🛠️ Технологический стек
 
-| Компонент | Технология | Назначение |
-|-----------|------------|------------|
-| **Язык** | Kotlin | Основной язык разработки |
-| **UI** | Jetpack Compose + Material 3 | Декларативный интерфейс |
-| **Архитектура** | MVVM | Разделение ответственности |
-| **DI** | Koin | Внедрение зависимостей |
-| **Сеть** | Retrofit| API запросы к рецептам |
-| **База данных** | Room | Локальное хранение |
-| **Аутентификация** | Firebase Auth + Google Sign-In | Вход через Google |
-| **Cloud DB** | Firestore | Хранение пользовательских рецептов |
-| **Асинхронность** | Kotlin Coroutines | Фоновые операции |
-| **Навигация** | Navigation Compose | Переходы между экранами |
-| **Загрузка изображений** | Coil | Загрузка картинок рецептов |
-| **Хранение настроек** | DataStore | Сохранение темы и предпочтений |
+```
+RecipeRealm
+├── 🎨  UI Layer
+│   ├── Jetpack Compose       — декларативный интерфейс
+│   ├── Material 3            — дизайн-система
+│   └── Coil                  — загрузка изображений
+│
+├── 🧠  Logic Layer
+│   ├── Kotlin Coroutines     — асинхронные операции
+│   ├── MVVM Architecture     — разделение ответственности
+│   └── Navigation Compose    — навигация между экранами
+│
+├── 💾  Data Layer
+│   ├── Retrofit              — сетевые запросы к API рецептов
+│   ├── Room                  — локальная база данных
+│   ├── Firestore             — облачное хранение рецептов
+│   └── DataStore             — настройки и предпочтения
+│
+└── 🔒  Auth & DI
+    ├── Firebase Auth         — аутентификация
+    ├── Google Sign-In        — вход через Google
+    └── Koin                  — внедрение зависимостей
+```
 
 ---
 
-## 📱 Требования
+## 📋 Требования
 
-- **minSdk**: 24 (Android 7.0 Nougat)
-- **targetSdk**: 35 (Android 15)
-- **Java/Kotlin**: Java 17, Kotlin 2.0+
-- **Google Play Services**: требуется для авторизации через Google
+- **Android**: минимум 7.0 Nougat (API 24+), цель — Android 15 (API 35)
+- **Java**: 17+
+- **Kotlin**: 2.0+
+- **Google Play Services**: требуется для Google Sign-In
 
 ---
 
-## 🚀 Установка и запуск
+## ⚙️ Установка и запуск
 
 ### 1. Клонирование репозитория
+
 ```bash
 git clone https://github.com/YOUR_USERNAME/RecipeRealm.git
 cd RecipeRealm
+```
+
+### 2. Настройка Firebase
+
+1. Создайте проект в [Firebase Console](https://console.firebase.google.com/)
+2. Добавьте Android-приложение с вашим `applicationId`
+3. Скачайте `google-services.json` и поместите в папку `app/`
+4. Включите **Authentication** (Google Sign-In) и **Firestore** в консоли
+
+### 3. Настройка Google Sign-In
+
+Добавьте в `local.properties`:
+
+```properties
+WEB_CLIENT_ID=your_web_client_id_here
+```
+
+### 4. Сборка и запуск
+
+```bash
+./gradlew assembleDebug
+```
+
+Или откройте проект в **Android Studio** и нажмите ▶️ Run.
+
+---
+
+<div align="center">
+
+Сделано с ❤️ и ☕ на Kotlin
+
+⭐ Если проект понравился — поставьте звезду!
+
+</div>
