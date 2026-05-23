@@ -44,12 +44,14 @@ fun NavGraph(
     startDestination: String = Screens.Home.route
 ) {
     val navController = rememberNavController()
+
     val startDestination = remember {
         if (FirebaseAuth.getInstance().currentUser != null)
             Screens.Home.route
         else
             Screens.Auth.route
     }
+
     var currentRoute by remember { mutableStateOf(startDestination) }
     var previousRoute by remember { mutableStateOf(startDestination) }
 
@@ -122,17 +124,21 @@ fun NavGraph(
                 )
             }
         ) {
+            //главный экран
             composable(route = Screens.Home.route) {
                 HomeScreen(
                     onCategoryClick = { categoryName ->
+                        //переход через объект Screens
                         navController.navigate(Screens.Meals.passCategory(categoryName))
                     },
                     onRandomMealClick = { mealId ->
+                        //переход через объект Screens
                         navController.navigate(Screens.MealDetail.passMealId(mealId))
                     }
                 )
             }
 
+            //экран поиска
             composable(route = Screens.Search.route) {
                 SearchScreen(
                     onMealClick = { mealId ->
@@ -141,6 +147,7 @@ fun NavGraph(
                 )
             }
 
+            //экран избранного
             composable(route = Screens.Favorites.route) {
                 FavoritesScreen(
                     onMealClick = { mealId ->
@@ -149,9 +156,12 @@ fun NavGraph(
                 )
             }
 
+            //экран профиля
             composable(route = Screens.Profile.route) {
                 ProfileScreen(
-                    onSettingsClick = { navController.navigate(Screens.Settings.route) },
+                    onSettingsClick = {
+                        navController.navigate(Screens.Settings.route)
+                    },
                     onLogoutClick = {
                         navController.navigate(Screens.Auth.route) {
                             popUpTo(0) { inclusive = true }
@@ -160,6 +170,7 @@ fun NavGraph(
                 )
             }
 
+            //экран категорий
             composable(route = Screens.Categories.route) {
                 CategoryScreen(
                     onCategoryClick = { categoryName ->
@@ -174,6 +185,7 @@ fun NavGraph(
                 )
             }
 
+            //экран списка рецептов
             composable(
                 route = Screens.Meals.route,
                 arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
@@ -188,6 +200,7 @@ fun NavGraph(
                 )
             }
 
+            //детальный экран рецепта
             composable(
                 route = Screens.MealDetail.route,
                 arguments = listOf(navArgument("mealId") { type = NavType.StringType })
@@ -198,6 +211,8 @@ fun NavGraph(
                     onBack = { navController.popBackStack() }
                 )
             }
+
+            //экран авторизации
             composable(route = Screens.Auth.route) {
                 AuthScreen(
                     onAuthSuccess = {
@@ -207,6 +222,8 @@ fun NavGraph(
                     }
                 )
             }
+
+            //экран настроек
             composable(route = Screens.Settings.route) {
                 SettingsScreen(
                     selectedColorTheme = selectedColorTheme,

@@ -11,6 +11,10 @@ import kotlinx.coroutines.launch
 class ProfileViewModel : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
+    //user.value содержит объект FirebaseUser с полями:
+    //uid (уникальный ID)
+    //displayName (имя пользователя)
+    //email (почта)
     val user = mutableStateOf(auth.currentUser)
 
     fun logout(context: android.content.Context) {

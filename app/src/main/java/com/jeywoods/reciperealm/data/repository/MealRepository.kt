@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.SocketTimeoutException
 
 class MealRepository(
     private val apiService: ApiService,
@@ -25,34 +26,57 @@ class MealRepository(
     private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun getCategories(): Flow<List<CategoryEntity>> {
-        Log.d("Repository", "getCategories called")
         repositoryScope.launch {
-            refreshCategories()
+            try {
+                refreshCategories()
+            } catch (e: Exception) {
+                Log.e("Repository", "Ошибка обновления категорий: ${e.message}")
+            }
         }
         return database.categoryDao().getAllCategories()
     }
 
     fun getMealsByCategory(categoryName: String): Flow<List<MealEntity>> {
         repositoryScope.launch {
-            refreshMealsByCategory(categoryName)
+            try {
+                refreshMealsByCategory(categoryName)
+            } catch (e: Exception) {
+                Log.e("Repository", "Ошибка обновления блюд: ${e.message}")
+            }
         }
         return database.mealDao().getMealsByCategory(categoryName)
+
+
     }
 
     suspend fun getMealDetails(mealId: String): MealDetailDto? {
+        //сначала проверяем кэш
         val cachedDetail = withContext(Dispatchers.IO) {
             database.mealDetailDao().getMealDetail(mealId).firstOrNull()
         }
+
         if (cachedDetail != null) {
+            //есть в кэше - возвращаем сразу
             if (networkManager.isNetworkAvailable()) {
-                repositoryScope.launch { fetchAndSaveMealDetail(mealId) }
+                //фоном обновляем
+                repositoryScope.launch {
+                    try {
+                        fetchAndSaveMealDetail(mealId)
+                    } catch (e: Exception) {
+                        Log.e("MealRepository", "Background update failed: ${e.message}")
+                    }
+                }
             }
             return cachedDetail.toDto()
         }
+
         return try {
             fetchAndSaveMealDetail(mealId)
+        } catch (e: SocketTimeoutException) {
+            Log.e("MealRepository", "Timeout getting meal details: ${e.message}")
+            null
         } catch (e: Exception) {
-            Log.e("MealRepository", "Ошибка загрузки категорий: ${e.message}", e)
+            Log.e("MealRepository", "Error getting meal details: ${e.message}")
             null
         }
     }
@@ -65,16 +89,24 @@ class MealRepository(
     }
 
     suspend fun getRandomMeal(): MealDetailDto? {
-        if (!networkManager.isNetworkAvailable()) {
-            return database.mealDetailDao().getAnyMealDetail().firstOrNull()?.toDto()
-        }
         return try {
+            if (!networkManager.isNetworkAvailable()) {
+                return database.mealDetailDao().getAnyMealDetail().firstOrNull()?.toDto()
+            }
+
             val response = apiService.getRandomMeal()
             val meal = response.meals?.firstOrNull()
-            meal?.let { saveMealToDatabase(it) }
+
+            if (meal != null) {
+                saveMealToDatabase(meal)
+            }
+
             meal
+        } catch (e: SocketTimeoutException) {
+            Log.e("MealRepository", "Timeout getting random meal: ${e.message}")
+            database.mealDetailDao().getAnyMealDetail().firstOrNull()?.toDto()
         } catch (e: Exception) {
-            Log.e("MealRepository", "Ошибка загрузки категорий: ${e.message}", e)
+            Log.e("MealRepository", "Error getting random meal: ${e.message}")
             database.mealDetailDao().getAnyMealDetail().firstOrNull()?.toDto()
         }
     }
@@ -111,7 +143,7 @@ class MealRepository(
             val entity = dto.toEntity()
             database.mealDetailDao().insertMealDetail(entity)
 
-            Log.d("SAVE", "Блюдо сохранено в БД")
+            Log.d("SAVE", "Блюдо сохранено в бд")
         }
     }
 

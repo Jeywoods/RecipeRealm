@@ -36,7 +36,7 @@ fun MealDetailScreen(mealId: String, onBack: () -> Unit) {
     val favViewModel = getKoin().get<FavoritesViewModel>()
     val viewModel = remember(mealId) { MealDetailViewModel(repository, mealId) }
 
-    val mealDetail by viewModel.mealDetail.collectAsState()
+    val mealDetail by viewModel.meal.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val isFavorite by favViewModel.isFavorite(mealId).collectAsState()
 

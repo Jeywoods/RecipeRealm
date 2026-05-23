@@ -13,18 +13,18 @@ class SearchViewModel(
     private val repository: MealRepository
 ) : ViewModel() {
 
-    private val _query = MutableStateFlow("")
+    private val _query = MutableStateFlow("")  //текущий поисковый запрос
     val query: StateFlow<String> = _query.asStateFlow()
 
     private val _results = MutableStateFlow<List<MealDto>>(emptyList())
     val results: StateFlow<List<MealDto>> = _results.asStateFlow()
-
+    //индикатор загрузки
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun onQueryChange(newQuery: String) {
-        _query.value = newQuery
-        if (newQuery.length >= 2) {
+        _query.value = newQuery //сохраняем запрос
+        if (newQuery.length >= 2) { //ищем только от 2 символов
             searchMeals(newQuery)
         } else if (newQuery.isEmpty()) {
             _results.value = emptyList()

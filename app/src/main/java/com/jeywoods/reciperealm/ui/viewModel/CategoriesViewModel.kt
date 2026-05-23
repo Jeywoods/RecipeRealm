@@ -27,27 +27,23 @@ class CategoriesViewModel(
     val isNetworkAvailable: StateFlow<Boolean> = _isNetworkAvailable.asStateFlow()
 
     init {
-        android.util.Log.d("CategoriesVM", "init called")
         loadCategories()
     }
 
     fun loadCategories() {
-        android.util.Log.d("CategoriesVM", "loadCategories called")
-        viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
+        viewModelScope.launch {  //запускаем корутину, которая привязана к жизненному циклу ViewModel
+            _isLoading.value = true   //включаем индикатор загрузки
+            _error.value = null       //сбрасываем предыдущую ошибку
 
-            repository.getCategories()
-                .catch { e ->
-                    android.util.Log.e("CategoriesVM", "Error: ${e.message}")
+            repository.getCategories()  //получаем Flow из репозитория
+                .catch { e ->           //ловим возможные ошибки в потоке
                     _error.value = "Category loading error: ${e.message}"
-                    _isLoading.value = false
+                    _isLoading.value = false  //выключаем загрузку при ошибке
                 }
-                .collect { categoriesList ->
-                    android.util.Log.d("CategoriesVM", "Received ${categoriesList.size} categories")
-                    _categories.value = categoriesList
-                    _isLoading.value = false
-                    _isNetworkAvailable.value = repository.isNetworkAvailable()
+                .collect { categoriesList ->  //каждый раз когда приходят новые данные из БД
+                    _categories.value = categoriesList   //обновляем UI
+                    _isLoading.value = false             //выключаем загрузку
+                    _isNetworkAvailable.value = repository.isNetworkAvailable()  //обновляем статус сети
                 }
         }
     }

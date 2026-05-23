@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jeywoods.reciperealm.data.repository.MealRepository
 import com.jeywoods.reciperealm.ui.components.AppTopBar
+import com.jeywoods.reciperealm.ui.components.RandomMealCard
 import com.jeywoods.reciperealm.ui.components.categoryScreen.CategoryCard
 import com.jeywoods.reciperealm.ui.viewModel.CategoriesViewModel
 import org.koin.compose.getKoin
@@ -47,7 +48,10 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                RandomMealCard(onRandomMealClick = onRandomMealClick)
+                RandomMealCard(
+                    viewModel = viewModel,
+                    onRandomMealClick = onRandomMealClick
+                )
             }
 
             item {
@@ -83,75 +87,3 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun RandomMealCard(onRandomMealClick: (String) -> Unit) {
-    var isLoading by remember { mutableStateOf(false) }
-    val repository = getKoin().get<MealRepository>()
-    val viewModel = remember { CategoriesViewModel(repository) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .height(110.dp)
-            .clickable(enabled = !isLoading) {
-                isLoading = true
-                viewModel.loadRandomMeal { mealId ->
-                    isLoading = false
-                    onRandomMealClick(mealId)
-                }
-            },
-        shape = RoundedCornerShape(24.dp),
-        elevation = CardDefaults.cardElevation(6.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.tertiary
-                        )
-                    )
-                )
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "🎲",
-                    fontSize = 48.sp
-                )
-
-                Spacer(modifier = Modifier.width(20.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Random recipe",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Click for inspiration",
-                        fontSize = 13.sp,
-                        color = Color.White.copy(alpha = 0.8f)
-                    )
-                }
-
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color.White,
-                        strokeWidth = 2.5.dp
-                    )
-                }
-            }
-        }
-    }
-}
